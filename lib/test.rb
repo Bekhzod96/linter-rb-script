@@ -43,7 +43,7 @@ class Test
     errors = []
     @file.each_with_index do |line, line_ind|
       if /[{]/ =~ line
-        BLOCK_HEADER_ERROR .each_with_index do |err, i|
+        BLOCK_HEADER_ERROR.each_with_index do |err, i|
           line =~ err[0] ? next : errors << "#{line_ind + 1}: #{BLOCK_HEADER_ERROR[i][1]}"
         end
         @block = true

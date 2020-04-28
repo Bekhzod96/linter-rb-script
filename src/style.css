@@ -1,9 +1,17 @@
-main {
-  margin: 0;
-  padding: 12;
-}
 
 main {
-  margin: 0;
-  padding: 12;
+width: 95%;
+  min-width: 1250px;
+  margin: 0 auto;
+}
+
+nav {
+  position: relative;
+  top: 86px;
+}
+
+body {
+  width: 95%;
+  min-width: 1250px;
+  margin: 0 auto;
 }
