@@ -25,8 +25,10 @@ In order to start with the project:
 1. You need to have ruby environment installed. [Click here for instructions](https://www.ruby-lang.org/en/documentation/installation/)
 2. Clone this repository `https://github.com/Bekhzod96/Linter.git`
 3. Run the algorithm file
-    - In a terminal window write `ruby `*`[your_file_path]`*`bin/ruby_linter.rb`
-
+    - In a terminal window write `ruby `*`[your_file_path]`*`ruby_linter.rb`
+4. Run the Unit test
+    - In a terminal window write `rspec`
+    
 ## Author
 
 👤 **Bekhzod Akhrorov**
