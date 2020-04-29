@@ -1,6 +1,6 @@
 require_relative '../lib/test.rb'
 
-test = Test.new('../src/style1.css')
+test = Test.new('./src/style.css')
 
 error = test.run_test
 
