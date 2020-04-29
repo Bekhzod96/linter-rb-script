@@ -25,7 +25,8 @@ RSpec.describe Test do
   context '#upload_file' do
     it 'other file should be uploaded' do
       result = subject.load_file('./src/style1.css')
-      expect(result).to eq(["main {\n", "  width: 95%;\n", "  \n", "  min-width: 1250px;\n", "  margin: 0 auto;\n", '}'])
+      expect(result).to eq(["main {\n", "  width: 95%;\n", "  \n",
+                            "  min-width: 1250px;\n", "  margin: 0 auto;\n", '}'])
     end
     it 'Enter valid address' do
       result = subject.load_file('./src/fake.css')
