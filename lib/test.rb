@@ -19,7 +19,7 @@ class Test
   ERROR_DESC = [
     [/^\s*$/, 'Unexpected empty line in rule body']
   ].freeze
-
+  attr_accessor :errors
   def initialize(url)
     @file = load_file(url)
     @extension = url.split('.')[-1]
