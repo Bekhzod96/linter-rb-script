@@ -1,1 +1,5 @@
-body {font-family: Arial;}
+main {
+  width: 95%;
+  min-width: 1250px;
+  margin: 0 auto;
+}

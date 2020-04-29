@@ -1,8 +1,4 @@
-# rubocop:disable Metrics/CyclomaticComplexity
-# rubocop:disable Metrics/MethodLength
-# rubocop:disable Metrics/PerceivedComplexity
 class Test
-  attr_reader :file, :extension
   ERROR_BODY = [
     [/.;/, "Expected newline after ';' in a multi-line declaration block"],
     [/^\s{2}\w/, 'Expected indentation of 2 spaces'],
@@ -16,18 +12,23 @@ class Test
   ].freeze
 
   BLOCK_END_ERROR = [
-    [/^\S/, 'Expected indentation of 0 spaces'],
+    [/^\S/, "Expected indentation of 0 spaces before '}'"],
     [/^\W/, "Expected newline before '}' of a multi-line block"]
   ].freeze
 
   ERROR_DESC = [
-    [/^\s*$/, 'Unexpected empty line detected']
+    [/^\s*$/, 'Unexpected empty line in rule body']
   ].freeze
 
   def initialize(url)
     @file = load_file(url)
     @extension = url.split('.')[-1]
     @block = false
+    @errors = []
+    @tracker = Hash.new(0)
+    @line = ''
+    @line_ind = 0
+    @count = 0
   end
 
   def load_file(url)
@@ -39,52 +40,49 @@ class Test
   end
 
   def run_test
-    tracker = Hash.new(0)
-    errors = []
     @file.each_with_index do |line, line_ind|
+      @line = line
+      @line_ind = line_ind
       if /[{]/ =~ line
-        BLOCK_HEADER_ERROR.each_with_index do |err, i|
-          line =~ err[0] ? next : errors << "#{line_ind + 1}: #{BLOCK_HEADER_ERROR[i][1]}"
-        end
+        error_collector(BLOCK_HEADER_ERROR)
         @block = true
         next
       elsif /[}]/ =~ line
-
         @block = false
-        tracker = Hash.new(0)
-        BLOCK_END_ERROR.each_with_index do |err, i|
-          line =~ err[0] ? next : errors << "#{line_ind + 1}: #{BLOCK_END_ERROR[i][1]}"
-        end
+        @tracker = Hash.new(0)
+        error_collector(BLOCK_END_ERROR)
         next
       elsif @block
-        tracker[line.split(/\W+/)[1]] += 1
-        if ERROR_DESC[0][0] =~ line
-          errors << "#{line_ind}: #{ERROR_DESC[0][1]}"
-          break
-        end
-        ERROR_BODY.each_with_index do |err, i|
-          line =~ err[0] ? next : errors << "#{line_ind + 1}: #{ERROR_BODY[i][1]}"
-        end
-
+        tracker
+        error_collector(ERROR_BODY)
       end
-
-      multi = check_multiplication(tracker)
-      multi.empty? ? nil : errors << "#{line_ind}: Unexpected multi declaration of #{multi[0]}"
+      check_multi_declartion(@tracker)
     end
-
-    puts errors
-    return '1 files inspected, no offenses detected' if errors.empty?
+    @errors
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/PerceivedComplexity
+  def tracker
+    separation = @line.split(':')
 
-  def check_multiplication(hash)
+    res = separation[0].split(/\s+/)
+    @tracker[res[-1]] += 1
+  end
+
+  def error_collector(err_type)
+    if ERROR_DESC[0][0] =~ @line && @block
+      @errors << "#{@line_ind}: #{ERROR_DESC[0][1]}"
+    else
+      err_type.each_with_index do |err, i|
+        @line =~ err[0] ? next : @errors << "#{@line_ind + 1}: #{err_type[i][1]}"
+      end
+    end
+  end
+
+  def check_multi_declartion(hash)
     result = []
     hash.each do |key, value|
       result << key if value > 1
     end
-    result
+    @errors << "#{@line_ind}: Unexpected multi declaration of #{result[0]}" unless result.empty?
   end
 end
