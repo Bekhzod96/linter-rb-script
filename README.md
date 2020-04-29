@@ -21,6 +21,7 @@ Even though modern compilers have evolved to include many of lint's historical f
 
 Lint-like tools are especially useful for interpreted languages like JavaScript and Python. Because such languages lack a compiling phase that displays a list of errors prior to execution, the tools can also be used as simple debuggers for common errors (e.g. syntactic discrepancies) as well as hard-to-find errors such as heisenbugs (drawing attention to suspicious code as "possible errors"). Lint-like tools generally perform static analysis of source code.
 
+
 ## Following Errors would be checked in Unit testing by RSpec, to run test take a look at Getting start
 
 - Expected newline after ';' in a multi-line declaration block
